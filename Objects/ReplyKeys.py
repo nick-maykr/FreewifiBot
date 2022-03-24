@@ -18,3 +18,9 @@ def confirm_logout():
         types.InlineKeyboardButton('❌ Выйти', callback_data='{"state": "logout-confirmed"}')
     ]
     return types.InlineKeyboardMarkup(row_width=2).add(*buttons)
+
+
+def back_to_menu():
+    return types.InlineKeyboardMarkup().add(
+        types.InlineKeyboardButton('↪️ Меню', callback_data='{"state": "menu"}')
+    )

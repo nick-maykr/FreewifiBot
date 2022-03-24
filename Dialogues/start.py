@@ -40,6 +40,7 @@ def authenticate(user, payload: str):
         client_id, password = payload.split("_")
         client = Clients(id=client_id).select()[0]
         if checkpw(bytes(password, "utf-8"), bytes(client.password, "utf-8")):
+            user.client = client.id
             login(user)
         else:
             raise ValueError

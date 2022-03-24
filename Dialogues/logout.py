@@ -1,5 +1,6 @@
 import json
 
+import Cache
 from Objects import bot
 from Objects.Loggers import ErrLog
 from Objects.DbObjects import User, Users
@@ -22,6 +23,7 @@ def logout(c):
     user = User(c.from_user.id)
     bot.answer_callback_query(c.id)
     bot.delete_message(user.id, c.message.id)
+    del Cache.states[user.id]
     Users(id=user.id).delete()
     txt = "Вы вышли из бота\nДо свидания!"
     bot.send_message(user.id, txt)
