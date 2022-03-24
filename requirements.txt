@@ -1,0 +1,17 @@
+bcrypt==3.2.0
+certifi==2021.10.8
+cffi==1.15.0
+charset-normalizer==2.0.12
+click==8.0.4
+Flask==2.0.3
+gunicorn==20.1.0
+idna==3.3
+itsdangerous==2.1.1
+Jinja2==3.0.3
+MarkupSafe==2.1.1
+pycparser==2.21
+pyTelegramBotAPI==4.4.0
+requests==2.27.1
+six==1.16.0
+urllib3==1.26.8
+Werkzeug==2.0.3
