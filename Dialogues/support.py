@@ -1,12 +1,11 @@
-import json
-
 from Objects import bot
 from Objects.Loggers import ErrLog
 from Objects.DbObjects import User
 from Objects.ReplyKeys import back_to_menu
+from Objects.TgCallbacks import process_callback as process_cb
 
 
-@bot.callback_query_handler(func=lambda c: json.loads(c.data)['state'] == 'support')
+@bot.callback_query_handler(func=lambda c: process_cb(c).state == 'support')
 @ErrLog
 def support_info(c):
     user = User(c.from_user.id)

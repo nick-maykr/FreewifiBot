@@ -179,11 +179,26 @@ class Client(_Row):
     """ id | password | name """
     table = "clients"
 
+    @property
+    def Hotspots(self) -> list[Hotspot]:
+        return ClientHotspots(client=self.id).Hotspots
+
 
 class Clients(_Table):
     """ id | password | name """
     table = "clients"
     RowObject = Client
+
+
+class ClientHotspots(_Table):
+    """ client | hotspot """
+    table = "client_hotspots"
+    items = ["client", "hotspot"]
+
+    @property
+    def Hotspots(self):
+        hs_ids = [i.hotspot for i in self.select()]
+        return [Hotspot(id_) for id_ in hs_ids]
 
 
 class Fail2Ban(_Row):
@@ -201,6 +216,11 @@ class Fail2Bans(_Table):
     table = "fail2ban"
 
 
+class Hotspot(_Row):
+    """ id | name """
+    table = "hotspots"
+
+
 class User(_Row):
     """ id | client | tg_name | state """
     table = "users"
@@ -211,7 +231,7 @@ class User(_Row):
 
     @property
     def Client(self) -> Client:
-        return Client(self.id)
+        return Client(self.client)
 
     @property
     def Fail2Ban(self) -> Fail2Ban:
