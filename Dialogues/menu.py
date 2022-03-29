@@ -2,10 +2,10 @@ from Objects import bot
 from Objects.DbObjects import User
 from Objects.Loggers import ErrLog
 from Objects.ReplyKeys import menu as menu_keys
-from Objects.TgCallbacks import process_callback as process_cb
+from Objects.TgCallbacks import process_callback as process_c
 
 
-@bot.callback_query_handler(func=lambda c: process_cb(c).state == 'menu')
+@bot.callback_query_handler(func=lambda c: process_c(c).state == 'menu')
 @ErrLog
 def back_to_menu(c):
     user = User(c.from_user.id)

@@ -3,10 +3,10 @@ from Objects import bot
 from Objects.Loggers import ErrLog
 from Objects.DbObjects import User, Users
 from Objects.ReplyKeys import confirm_logout
-from Objects.TgCallbacks import process_callback as process_cb
+from Objects.TgCallbacks import process_callback as process_c
 
 
-@bot.callback_query_handler(func=lambda c: process_cb(c).state == 'logout')
+@bot.callback_query_handler(func=lambda c: process_c(c).state == 'logout')
 @ErrLog
 def ask(c):
     user = User(c.from_user.id)
@@ -16,7 +16,7 @@ def ask(c):
     bot.send_message(user.id, txt, reply_markup=confirm_logout(), parse_mode='HTML')
 
 
-@bot.callback_query_handler(func=lambda c: process_cb(c).state == 'logout-confirmed')
+@bot.callback_query_handler(func=lambda c: process_c(c).state == 'logout-confirmed')
 @ErrLog
 def logout(c):
     user = User(c.from_user.id)
