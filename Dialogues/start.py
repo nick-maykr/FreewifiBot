@@ -1,9 +1,9 @@
 from bcrypt import checkpw
 from telebot.types import Message
 
-from Objects import bot
-from Objects.DbObjects import Clients, Fail2Bans, User, Users
-from Objects.Loggers import ErrLog
+from Modules import bot
+from Modules.BotDatabase import Clients, Fail2Bans, User, Users
+from Modules.Loggers import ErrLog
 from Dialogues import menu
 
 

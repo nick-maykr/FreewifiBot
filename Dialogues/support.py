@@ -1,8 +1,8 @@
-from Objects import bot
-from Objects.Loggers import ErrLog
-from Objects.DbObjects import User
-from Objects.ReplyKeys import back_to_menu
-from Objects.TgCallbacks import process_callback as process_c
+from Modules import bot
+from Modules.Loggers import ErrLog
+from Modules.BotDatabase import User
+from Modules.ReplyKeys import back_to_menu
+from Modules.TgCallbacks import process_callback as process_c
 
 
 @bot.callback_query_handler(func=lambda c: process_c(c).state == 'support')

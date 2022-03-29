@@ -1,7 +1,7 @@
 from telebot import types
 
-from Objects.DbObjects import PkError, User
-from Objects.Loggers import MessageLogger, ErrLog
+from Modules.BotDatabase import PkError, User
+from Modules.Loggers import MessageLogger, ErrLog
 import Cache
 
 

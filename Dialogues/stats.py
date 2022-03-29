@@ -1,11 +1,11 @@
 """TODO
 - check if user has this point in db to counter malicious callback data
 """
-from Objects import bot
-from Objects.DbObjects import Clients, Fail2Bans, User, Users, Hotspot
-from Objects.Loggers import ErrLog
-from Objects import ReplyKeys
-from Objects.TgCallbacks import process_callback as process_c
+from Modules import bot
+from Modules.BotDatabase import Clients, Fail2Bans, User, Users, Hotspot
+from Modules.Loggers import ErrLog
+from Modules import ReplyKeys
+from Modules.TgCallbacks import process_callback as process_c
 
 
 @bot.callback_query_handler(func=lambda c: process_c(c).state == 'stat-hotspots')

@@ -4,7 +4,8 @@ import datetime
 import sqlite3
 
 import Cache
-from Objects.Loggers import sql_logger
+from Modules.Loggers import sql_logger
+from config import BOT_DB
 
 
 class PkError(Exception):
@@ -26,7 +27,7 @@ class Query:
         self.rows, self.rowcount = self.execute()
 
     def execute(self):
-        conn = sqlite3.connect('databases/clients.db', isolation_level=None)
+        conn = sqlite3.connect(**BOT_DB)
         conn.execute("PRAGMA foreign_keys = 1")
         sql_logger.debug(self.sql)
         conn.row_factory = sqlite3.Row

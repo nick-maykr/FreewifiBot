@@ -4,8 +4,8 @@ import telebot
 import flask
 
 import config
-from Objects import bot
-from Objects.Loggers import server
+from Modules import bot
+from Modules.Loggers import server
 from preprocess import preprocess_update
 # noinspection PyUnresolvedReferences
 import Dialogues
