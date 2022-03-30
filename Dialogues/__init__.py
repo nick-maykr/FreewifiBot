@@ -11,4 +11,7 @@ def restart(m):
 
 @bot.message_handler(content_types=['text'], func=lambda m: User(m.from_user.id).quickstate)
 def delete_users_input(m):
+    """
+    Works for authorized or banned users.
+    """
     bot.delete_message(m.from_user.id, m.id)

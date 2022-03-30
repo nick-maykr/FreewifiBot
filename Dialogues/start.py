@@ -49,9 +49,14 @@ def authenticate(user, payload: str):
 
 
 def deny(user):
+    """
+    To unban a user his state must be manually reset in the users tabe.
+    Resetting fail2ban.failed_attempts is optional.
+    """
+
     user.Fail2Ban.failed_attempts += 1
     remaining = user.Fail2Ban.remaining
-    if remaining:
+    if remaining > 0:  # this value can get negative if DB is manipulated wrongly
         txt = f"⚠️ Неверная ссылка авторизации. Осталось попыток: {remaining}"
     else:
         user.state = "banned"

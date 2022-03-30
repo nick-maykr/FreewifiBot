@@ -49,7 +49,6 @@ def get_picked_hotspots(user, picked_hotspot: int | str) -> list[Hotspot]:
 def export(c):
     user = User(c.from_user.id)
     bot.delete_message(user.id, c.message.id)
-    bot.answer_callback_query(c.id, "Пожалуйста, подождите...")
 
     callback_hotspot = process_c(c).hs
     callback_startdate = process_c(c).dt
@@ -57,6 +56,7 @@ def export(c):
     hotspots = [hs for hs in hotspots if hs in user.Client.Hotspots]
 
     loading = send_random_sticker(user)
+    bot.answer_callback_query(c.id, "Пожалуйста, подождите...")
 
     for hs in hotspots:
 
