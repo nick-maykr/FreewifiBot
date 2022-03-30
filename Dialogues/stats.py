@@ -1,10 +1,14 @@
-"""TODO
-- check if user has this point in db to counter malicious callback data
-"""
+import os
+import random
+
+from telebot.types import Message
+
 from Modules import bot
-from Modules.BotDatabase import Clients, Fail2Bans, User, Users, Hotspot
+from Modules.BotDatabase import User, Hotspot
+from Modules.Excel import make_xlsx
 from Modules.Loggers import ErrLog
 from Modules import ReplyKeys
+from Modules.ConnectionHistory import ConnectionCache
 from Modules.TgCallbacks import process_callback as process_c
 
 
@@ -52,5 +56,25 @@ def export(c):
     hotspots = get_picked_hotspots(user, callback_hotspot)
     hotspots = [hs for hs in hotspots if hs in user.Client.Hotspots]
 
+    loading = send_random_sticker(user)
+
     for hs in hotspots:
-        bot.send_message(user.id, hs.name)
+
+        data = ConnectionCache(hs.name).read(callback_startdate)
+        if data.empty:
+            txt = f"{hs.name}\nЗа выбранный период нет подключений :("
+            bot.send_message(user.id, txt)
+            continue
+
+        file, filename, connection_count = make_xlsx(data, hs.name)
+        bot.send_document(user.id, file, visible_file_name=filename, caption=connection_count)
+
+    bot.delete_message(user.id, loading.id)
+    bot.send_message(user.id, "Готово!", reply_markup=ReplyKeys.back_to_menu())
+
+
+def send_random_sticker(user) -> Message:
+    filepath = "Dialogues/stickers"
+    filename = random.choice(os.listdir(filepath))
+    with open(os.path.join(filepath, filename), 'rb') as sticker:
+        return bot.send_sticker(user.id, sticker)

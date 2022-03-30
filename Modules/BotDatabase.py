@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-import datetime
 import sqlite3
 
-import Cache
 from Modules.Loggers import sql_logger
+from Modules import UsersCache
 from config import BOT_DB
 
 
@@ -228,7 +227,7 @@ class User(_Row):
 
     @property
     def quickstate(self) -> str:
-        return Cache.states.get(self.id)
+        return UsersCache.states.get(self.id)
 
     @property
     def Client(self) -> Client:

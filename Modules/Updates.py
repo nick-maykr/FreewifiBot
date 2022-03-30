@@ -2,10 +2,10 @@ from telebot import types
 
 from Modules.BotDatabase import PkError, User
 from Modules.Loggers import MessageLogger, ErrLog
-import Cache
+from Modules import UsersCache
 
 
-class PreProcessor:
+class UpdatePreprocessor:
 
     def __init__(self, update: types.Update):
         self.update = update
@@ -39,7 +39,7 @@ class PreProcessor:
     def update_cache(self):
         try:
             self.state = User(self.user_id).state
-            Cache.states |= {self.user_id: self.state}
+            UsersCache.states |= {self.user_id: self.state}
         except PkError:
             return
 
@@ -49,6 +49,7 @@ class PreProcessor:
 
 
 @ErrLog
-def preprocess_update(update):
-    preprocess = PreProcessor(update)
-    preprocess()
+def preprocess_updates(updates):
+    for update in updates:
+        preprocess = UpdatePreprocessor(update)
+        preprocess()
