@@ -40,8 +40,8 @@ def _prepare_data(df: pd.DataFrame, hotspot_name: str) -> pd.DataFrame:
                     'phone': 'Телефон',
                     'acctstarttime': 'Подключение',
                     'acctsessiontime': 'Длительность (час:мин)',
-                    'acctinputoctets': 'Передано Мегабайт',
-                    'acctoutputoctets': 'Принято Мегабайт'}
+                    'acctoutputoctets': 'Принято Мегабайт',
+                    'acctinputoctets': 'Передано Мегабайт'}
     df = df[column_names.keys()]
     df = df.rename(columns=column_names)
 
