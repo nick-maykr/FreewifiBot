@@ -20,19 +20,16 @@ for a quicker subsequent access, and sent to a user in a
 
 ## Features
 
----
 - [x] Passwordless authentication via deep linking, fail2ban
 - [x] [Logging](Modules/Bot.py) of all the incoming and outgoing messages
 - [x] [Sqlite ORM](Modules/BotDatabase.py) (Yes, I am aware of sqlalchemy, just wanted to practice:)
 
 ## ToDo
 
----
 - [ ] Line charts for the unique hotspot users over the given period
 
 ## Credits
 
----
 Special thanks for the awesome libraries:
 - eternnoir [pyTelegramBotAPI](https://github.com/eternnoir/pyTelegramBotAPI)
 - jmcnamara [XlsxWriter](https://github.com/jmcnamara/XlsxWriter)
