@@ -37,7 +37,7 @@ def info(user):
 
 def authenticate(user, payload: str):
     try:
-        client_id, password = payload.split("_")
+        client_id, password = payload.split("_", maxsplit=1)
         client = Clients(id=client_id).select()[0]
         if checkpw(bytes(password, "utf-8"), bytes(client.password, "utf-8")):
             user.client = client.id
