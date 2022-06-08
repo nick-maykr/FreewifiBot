@@ -96,7 +96,7 @@ def _rus_connection_count(n: int) -> str:
         connections = 'подключение'
     else:
         connections = 'подключения'
-    return f'{n} {connections}'
+    return f'{n:,} {connections}'
 
 
 def _get_filename(df: pd.DataFrame, hotspot_name: str) -> str:
