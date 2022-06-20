@@ -1,5 +1,7 @@
 # Freewifi.by-Telegram-Bot 
-
+![GitHub last commit](https://img.shields.io/github/last-commit/nick-maykr/Freewifi.by-Telegram-Bot)
+![GitHub](https://img.shields.io/github/license/nick-maykr/Freewifi.by-Telegram-Bot)
+![Python](https://img.shields.io/badge/python-v3.10-blue)
 
 https://t.me/FreewifibyBot
 
@@ -14,9 +16,8 @@ The data is fetched from two remote databases:
 
 Then it gets processed, saved to the [local Cache](Modules/ConnectionHistory.py) 
 for a quicker subsequent access, and sent to a user in a 
- formatted .xlsx file.
+ formatted .xlsx file:
 ![](docs/file_preview.png)
-
 
 ## Features
 
