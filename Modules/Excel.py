@@ -103,11 +103,12 @@ def _get_filename(df: pd.DataFrame, hotspot_name: str) -> str:
     extension = ".xlsx"
     mindate = df.acctstarttime.min().date()
     maxdate = df.acctstarttime.max().date()
+    hotspot_name = hotspot_name[:40]  # tg filename limit is 60
     if mindate == maxdate:
-        filename = f'{hotspot_name} ({mindate:%d.%m.%y})'
+        filename = f'{hotspot_name}-{mindate:%d.%m.%y}'
     else:
-        filename = f'{hotspot_name} ({mindate:%d.%m.%y} - {maxdate:%d.%m.%y})'
+        filename = f'{hotspot_name}-{mindate:%d.%m.%y}_{maxdate:%d.%m.%y}'
     if maxdate == dt.date.today():
-        filename = filename.removesuffix(')') + '..)'
+        filename += '_'
 
     return filename + extension
