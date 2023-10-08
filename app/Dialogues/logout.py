@@ -1,9 +1,9 @@
-from Modules import bot
-from Modules.Loggers import ErrLog
-from Modules.BotDatabase import User, Users
-from Modules.ReplyKeys import confirm_logout
-from Modules.TgCallbacks import process_callback as process_c
-from Modules import UsersCache
+from app.Modules import bot
+from app.Modules.Loggers import ErrLog
+from app.Modules.BotDatabase import User, Users
+from app.Modules.ReplyKeys import confirm_logout
+from app.Modules.TgCallbacks import process_callback as process_c
+from app.Modules import UsersCache
 
 
 @bot.callback_query_handler(func=lambda c: process_c(c).state == 'logout')

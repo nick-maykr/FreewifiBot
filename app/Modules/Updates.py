@@ -1,8 +1,8 @@
 from telebot import types
 
-from Modules.BotDatabase import PkError, User
-from Modules.Loggers import MessageLogger, ErrLog
-from Modules import UsersCache
+from app.Modules.BotDatabase import PkError, User
+from app.Modules.Loggers import MessageLogger, ErrLog
+from app.Modules import UsersCache
 
 
 class UpdatePreprocessor:

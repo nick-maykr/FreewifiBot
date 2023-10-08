@@ -1,4 +1,4 @@
-/config.py
+/app/config.py
 /*.command
 /generate_link.py
 

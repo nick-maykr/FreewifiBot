@@ -1,8 +1,8 @@
-from Modules import bot
-from Modules.BotDatabase import User
-from Modules.Loggers import ErrLog
-from Modules.ReplyKeys import menu as menu_keys
-from Modules.TgCallbacks import process_callback as process_c
+from app.Modules import bot
+from app.Modules.BotDatabase import User
+from app.Modules.Loggers import ErrLog
+from app.Modules.ReplyKeys import menu as menu_keys
+from app.Modules.TgCallbacks import process_callback as process_c
 
 
 @bot.callback_query_handler(func=lambda c: process_c(c).state == 'menu')

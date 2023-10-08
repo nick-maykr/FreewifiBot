@@ -6,7 +6,7 @@ import pandas as pd
 import pymysql.cursors
 import sqlite3
 
-from config import CACHE_DB, WP_DB, REMOTE_DB
+from app.config import CACHE_DB, WP_DB, REMOTE_DB
 
 
 RADACCT_COLS = [

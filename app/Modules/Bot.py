@@ -2,9 +2,9 @@ from typing import Union, Optional
 from telebot import TeleBot, types
 from telebot.apihelper import ApiTelegramException
 
-from config import BOT_TOKEN
-from Modules.Loggers import ErrLog, MessageLogger
-from Modules.Updates import preprocess_updates
+from app.config import BOT_TOKEN
+from app.Modules.Loggers import MessageLogger
+from app.Modules.Updates import preprocess_updates
 
 
 class LoggerMeta(type):
