@@ -83,10 +83,13 @@ class ConnectionCache:
         in wp_proxy_entries table.
         """
         wp = WpProxyEntries.read()
+        print(f"{wp['phone'].isna().sum()=}")
         radacct.sort_values(by='acctstarttime', inplace=True)
         wp.sort_values(by='acctstarttime', inplace=True)
         connections = pd.merge_asof(radacct, wp, on='acctstarttime', by='mac')
         connections = connections[CONNECTIONS_COLS]
+        print(f"{connections['phone'].isna().sum()=}")
+
         assert connections['phone'].notna().all(), "N/A phone values in connections"
         return connections
 
