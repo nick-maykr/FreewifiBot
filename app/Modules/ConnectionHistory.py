@@ -83,11 +83,11 @@ class ConnectionCache:
         in wp_proxy_entries table.
         """
         wp = WpProxyEntries.read()
-        assert wp['phone'].notna().all(), "N/A phone values in wp"
         radacct.sort_values(by='acctstarttime', inplace=True)
         wp.sort_values(by='acctstarttime', inplace=True)
         connections = pd.merge_asof(radacct, wp, on='acctstarttime', by='mac')
         connections = connections[CONNECTIONS_COLS]
+        assert connections['phone'].notna().all(), "N/A phone values in connections"
         return connections
 
     def _del_temp_connections(self):
