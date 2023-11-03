@@ -3,7 +3,7 @@ import json
 from typing import Literal
 
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
-from app.Modules.BotDatabase import Hotspot
+from Modules.BotDatabase import Hotspot
 
 
 menu_button = InlineKeyboardButton('↪️ Меню', callback_data='{"state": "menu"}')

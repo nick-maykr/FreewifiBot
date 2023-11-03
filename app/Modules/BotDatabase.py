@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import sqlite3
 
-from app.Modules.Loggers import sql_logger
-from app.Modules import UsersCache
-from app.config import BOT_DB
+from Modules.Loggers import sql_logger
+from Modules import UsersCache
+from config import BOT_DB
 
 
 class PkError(Exception):

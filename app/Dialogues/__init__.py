@@ -1,6 +1,6 @@
 from . import start, menu, logout, support, stats
-from app.Modules import bot
-from app.Modules.BotDatabase import User
+from Modules import bot
+from Modules.BotDatabase import User
 
 
 @bot.message_handler(commands=['start'], func=lambda m: User(m.from_user.id).client)

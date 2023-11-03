@@ -6,7 +6,7 @@ import pandas as pd
 import pymysql.cursors
 import sqlite3
 
-from app.config import CACHE_DB, WP_DB, REMOTE_DB
+from config import CACHE_DB, WP_DB, PROD_DB
 
 
 RADACCT_COLS = [
@@ -72,7 +72,7 @@ class ConnectionCache:
         conditions = " AND ".join(conditions)
         table = "radius.radacct"
         sql = f"SELECT {columns} FROM {table} WHERE {conditions}"
-        with pymysql.connect(**REMOTE_DB) as c:
+        with pymysql.connect(**PROD_DB) as c:
             return pd.read_sql(sql, c)
 
     @staticmethod
@@ -83,6 +83,7 @@ class ConnectionCache:
         in wp_proxy_entries table.
         """
         wp = WpProxyEntries.read()
+        assert wp['phone'].notna().all(), "N/A phone values in wp"
         radacct.sort_values(by='acctstarttime', inplace=True)
         wp.sort_values(by='acctstarttime', inplace=True)
         connections = pd.merge_asof(radacct, wp, on='acctstarttime', by='mac')
@@ -116,7 +117,7 @@ class ConnectionCache:
     @staticmethod
     def _get_latest_radacctid() -> int:
         sql = f"SELECT MAX(radacctid) FROM radius.radacct"
-        with pymysql.connect(**REMOTE_DB) as c:
+        with pymysql.connect(**PROD_DB) as c:
             with c.cursor() as cursor:
                 cursor.execute(sql)
                 return cursor.fetchone()[0]
@@ -161,7 +162,7 @@ class WpProxyEntries:
         columns = ", ".join(WP_COLS)
         table = "wifi_wp_base.wp_proxy_entries"
         sql = f"SELECT {columns} from {table} WHERE id > {cls.last_row}"
-        with pymysql.connect(**REMOTE_DB) as c:
+        with pymysql.connect(**PROD_DB) as c:
             return pd.read_sql(sql, c)
 
     @classmethod

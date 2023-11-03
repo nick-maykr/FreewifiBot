@@ -3,13 +3,13 @@ import random
 
 from telebot.types import Message
 
-from app.Modules import bot
-from app.Modules.BotDatabase import User, Hotspot
-from app.Modules.Excel import make_xlsx
-from app.Modules.Loggers import ErrLog
-from app.Modules import ReplyKeys
-from app.Modules.ConnectionHistory import ConnectionCache
-from app.Modules.TgCallbacks import process_callback as process_c
+from Modules import bot
+from Modules.BotDatabase import User, Hotspot
+from Modules.Excel import make_xlsx
+from Modules.Loggers import ErrLog
+from Modules import ReplyKeys
+from Modules.ConnectionHistory import ConnectionCache
+from Modules.TgCallbacks import process_callback as process_c
 
 
 @bot.callback_query_handler(func=lambda c: process_c(c).state == 'stat-hotspots')

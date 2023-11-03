@@ -1,10 +1,10 @@
 from bcrypt import checkpw
 from telebot.types import Message
 
-from app.Modules import bot
-from app.Modules.BotDatabase import Clients, Fail2Bans, User, Users
-from app.Modules.Loggers import ErrLog
-from app.Dialogues import menu
+from Modules import bot
+from Modules.BotDatabase import Clients, Fail2Bans, User, Users
+from Modules.Loggers import ErrLog
+from Dialogues import menu
 
 
 @bot.message_handler(commands=['start'],
