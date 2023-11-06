@@ -55,7 +55,8 @@ class ConnectionCache:
 
         # Temporary fix. Radius container writes entries in UTC-0,
         # while WP uses the WordPress setting.
-        radacct["acctstarttime"] += pd.Timedelta(hours=3)
+        rows_after_tz_change = radacct.radacctid > 4742025
+        radacct.loc[rows_after_tz_change, "acctstarttime"] += pd.Timedelta(hours=3)
 
         if radacct.empty:
             reserve = 20  # in case new connections occured
