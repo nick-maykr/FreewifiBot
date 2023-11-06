@@ -86,6 +86,8 @@ class ConnectionCache:
         print(f"{wp['phone'].isna().sum()=}")
         radacct.sort_values(by='acctstarttime', inplace=True)
         wp.sort_values(by='acctstarttime', inplace=True)
+        wp.to_csv('databases/wp_export.csv', index=False)
+        radacct.to_csv('databases/radacct_export.csv', index=False)
         connections = pd.merge_asof(radacct, wp, on='acctstarttime', by='mac')
         connections = connections[CONNECTIONS_COLS]
         print(f"{connections['phone'].isna().sum()=}")
