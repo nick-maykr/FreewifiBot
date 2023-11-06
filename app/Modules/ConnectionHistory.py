@@ -53,6 +53,10 @@ class ConnectionCache:
     def update(self):
         radacct = self._select_new_radacct_rows()
 
+        # Temporary fix. Radius container writes entries in UTC-0,
+        # while WP uses the WordPress setting.
+        radacct["acctstarttime"] += pd.Timedelta(hours=3)
+
         if radacct.empty:
             reserve = 20  # in case new connections occured
             self.last_row = self._get_latest_radacctid() - reserve
@@ -83,16 +87,11 @@ class ConnectionCache:
         in wp_proxy_entries table.
         """
         wp = WpProxyEntries.read()
-        print(f"{wp['phone'].isna().sum()=}")
         radacct.sort_values(by='acctstarttime', inplace=True)
         wp.sort_values(by='acctstarttime', inplace=True)
-        wp.to_csv('databases/wp_export.csv', index=False)
-        radacct.to_csv('databases/radacct_export.csv', index=False)
         connections = pd.merge_asof(radacct, wp, on='acctstarttime', by='mac')
         connections = connections[CONNECTIONS_COLS]
-        print(f"{connections['phone'].isna().sum()=}")
 
-        assert connections['phone'].notna().all(), "N/A phone values in connections"
         return connections
 
     def _del_temp_connections(self):
