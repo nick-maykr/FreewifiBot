@@ -1,7 +1,7 @@
 from flask_apscheduler import APScheduler
 
-from Bot import bot
-from BotDatabase import Hotspots
+from Modules.Bot import bot
+from Modules.BotDatabase import Hotspots
 from config import ADMIN_USERIDS, PROD_DB
 
 scheduler = APScheduler()
