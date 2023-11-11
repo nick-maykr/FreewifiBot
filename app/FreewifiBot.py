@@ -6,11 +6,14 @@ import flask
 import config
 from Modules import bot
 from Modules.Loggers import server
+from Modules.scheduled_healthcheck import scheduler
 # noinspection PyUnresolvedReferences
 import Dialogues
 
 
 app = flask.Flask(__name__)
+scheduler.init_app(app)
+scheduler.start()
 
 
 @app.route(config.WEBHOOK_URL_PATH, methods=['POST'])
