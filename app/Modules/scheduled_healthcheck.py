@@ -4,13 +4,18 @@ import pymysql.cursors
 
 from Modules.Bot import bot
 from Modules.BotDatabase import Hotspots
-from config import ADMIN_USERIDS, PROD_DB
+from config import (
+    ADMIN_USERIDS,
+    DAYS_OFFLINE_FOR_ALERT,
+    MAX_MESSAGE_TEXT_LENGTH,
+    PROD_DB,
+)
 
 scheduler = APScheduler()
 
 
 # noinspection SqlResolve
-# @scheduler.task('interval', id='run_healthcheck', seconds=30)
+@scheduler.task('interval', id='run_healthcheck', seconds=30)
 def run_healthcheck():
     active_hotspots = Hotspots(is_active=True).select()
     q = f"""
@@ -25,10 +30,12 @@ def run_healthcheck():
     """
     with pymysql.connect(**PROD_DB) as c:
         df = pd.read_sql(q, c)
-    text = str(df.to_dict(orient='records'))
+
+    df = df[df.days_offline > DAYS_OFFLINE_FOR_ALERT]
+
+    text = "\n\n".join(df.to_dict(orient='records'))
+
     for userid in ADMIN_USERIDS:
-        for i in range(0, len(text), 4096):
-            bot.send_message(userid, text[i:i+4096])
-
-
-run_healthcheck()
+        # Split text into batches
+        for i in range(0, len(text), MAX_MESSAGE_TEXT_LENGTH):
+            bot.send_message(userid, text[i:i + MAX_MESSAGE_TEXT_LENGTH])
