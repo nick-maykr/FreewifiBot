@@ -3,7 +3,7 @@ from telebot import TeleBot, types
 from telebot.apihelper import ApiTelegramException
 
 from config import BOT_TOKEN
-from Modules.Loggers import ErrLog, MessageLogger
+from Modules.Loggers import MessageLogger
 from Modules.Updates import preprocess_updates
 
 

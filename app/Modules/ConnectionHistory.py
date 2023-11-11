@@ -6,7 +6,7 @@ import pandas as pd
 import pymysql.cursors
 import sqlite3
 
-from config import CACHE_DB, WP_DB, REMOTE_DB
+from config import CACHE_DB, WP_DB, PROD_DB
 
 
 RADACCT_COLS = [
@@ -53,6 +53,11 @@ class ConnectionCache:
     def update(self):
         radacct = self._select_new_radacct_rows()
 
+        # Temporary fix. Radius container writes entries in UTC-0,
+        # while WP uses the WordPress setting.
+        rows_after_tz_change = radacct.radacctid > 4742025
+        radacct.loc[rows_after_tz_change, "acctstarttime"] += pd.Timedelta(hours=3)
+
         if radacct.empty:
             reserve = 20  # in case new connections occured
             self.last_row = self._get_latest_radacctid() - reserve
@@ -72,7 +77,7 @@ class ConnectionCache:
         conditions = " AND ".join(conditions)
         table = "radius.radacct"
         sql = f"SELECT {columns} FROM {table} WHERE {conditions}"
-        with pymysql.connect(**REMOTE_DB) as c:
+        with pymysql.connect(**PROD_DB) as c:
             return pd.read_sql(sql, c)
 
     @staticmethod
@@ -87,6 +92,7 @@ class ConnectionCache:
         wp.sort_values(by='acctstarttime', inplace=True)
         connections = pd.merge_asof(radacct, wp, on='acctstarttime', by='mac')
         connections = connections[CONNECTIONS_COLS]
+
         return connections
 
     def _del_temp_connections(self):
@@ -116,7 +122,7 @@ class ConnectionCache:
     @staticmethod
     def _get_latest_radacctid() -> int:
         sql = f"SELECT MAX(radacctid) FROM radius.radacct"
-        with pymysql.connect(**REMOTE_DB) as c:
+        with pymysql.connect(**PROD_DB) as c:
             with c.cursor() as cursor:
                 cursor.execute(sql)
                 return cursor.fetchone()[0]
@@ -161,7 +167,7 @@ class WpProxyEntries:
         columns = ", ".join(WP_COLS)
         table = "wifi_wp_base.wp_proxy_entries"
         sql = f"SELECT {columns} from {table} WHERE id > {cls.last_row}"
-        with pymysql.connect(**REMOTE_DB) as c:
+        with pymysql.connect(**PROD_DB) as c:
             return pd.read_sql(sql, c)
 
     @classmethod
