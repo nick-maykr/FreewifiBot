@@ -27,7 +27,8 @@ def run_healthcheck():
         df = pd.read_sql(q, c)
     text = str(df.to_dict(orient='records'))
     for userid in ADMIN_USERIDS:
-        bot.send_message(userid, text)
+        for i in range(0, len(text), 4096):
+            bot.send_message(userid, text[i:i+4096])
 
 
 run_healthcheck()
