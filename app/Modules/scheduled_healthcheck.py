@@ -20,6 +20,7 @@ def run_healthcheck():
         datediff(current_timestamp, max(acctstarttime)) as days_offline
     from radius.radacct 
     where calledstationid in {tuple(hs.name for hs in active_hotspots)}
+    group by calledstationid
     order by days_offline desc
     """
     with pymysql.connect(**PROD_DB) as c:
