@@ -56,7 +56,7 @@ def df_to_text_batches(df: pd.DataFrame) -> list[str]:
     return text_batches
 
 
-@scheduler.task('interval', id='run_healthcheck', seconds=30)
+@scheduler.task('cron', id='run_healthcheck', hour=16)
 def run_healthcheck():
     df = get_problematic_hotspots()
     if df.empty:
