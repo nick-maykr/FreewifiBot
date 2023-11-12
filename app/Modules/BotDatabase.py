@@ -217,8 +217,14 @@ class Fail2Bans(_Table):
 
 
 class Hotspot(_Row):
-    """ id | name """
+    """ id | name | is_active """
     table = "hotspots"
+
+
+class Hotspots(_Table):
+    """ id | name | is_active """
+    table = "hotspots"
+    RowObject = Hotspot
 
 
 class User(_Row):
