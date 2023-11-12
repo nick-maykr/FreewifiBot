@@ -15,27 +15,51 @@ scheduler = APScheduler()
 
 
 # noinspection SqlResolve
-@scheduler.task('interval', id='run_healthcheck', seconds=30)
-def run_healthcheck():
+def get_problematic_hotspots() -> pd.DataFrame:
     active_hotspots = Hotspots(is_active=True).select()
     q = f"""
-    select 
-        calledstationid, 
-        max(acctstarttime) as last_connection,
-        datediff(current_timestamp, max(acctstarttime)) as days_offline
-    from radius.radacct 
-    where calledstationid in {tuple(hs.name for hs in active_hotspots)}
-    group by calledstationid
-    order by days_offline desc
-    """
+        select 
+            calledstationid as hotspot, 
+            max(acctstarttime) as last_connection,
+            datediff(current_timestamp, max(acctstarttime)) as days_offline
+        from radius.radacct 
+        where calledstationid in {tuple(hs.name for hs in active_hotspots)}
+        group by calledstationid
+        order by days_offline desc
+        """
     with pymysql.connect(**PROD_DB) as c:
         df = pd.read_sql(q, c)
 
-    df = df[df.days_offline > DAYS_OFFLINE_FOR_ALERT]
+    df = df[df.days_offline >= DAYS_OFFLINE_FOR_ALERT]
+    return df
 
-    text = "\n\n".join(df.to_dict(orient='records'))
+
+def df_to_text_batches(df: pd.DataFrame) -> list[str]:
+    text_batches = []
+    current_text_batch = ""
+    for row in df.itertuples(index=False):
+        text = f"{row.hotspot}\nLast connection: {row.last_connection} ({row.days_offline}) day(s) ago\n\n"
+        if len(text) > MAX_MESSAGE_TEXT_LENGTH:
+            text = "<Text length error>"
+
+        if len(current_text_batch + text) < MAX_MESSAGE_TEXT_LENGTH:
+            current_text_batch += text
+        else:
+            text_batches += current_text_batch
+            current_text_batch = text
+
+    return text_batches
+
+
+@scheduler.task('interval', id='run_healthcheck', seconds=30)
+def run_healthcheck():
+    df = get_problematic_hotspots()
+    if df.empty:
+        return
+
+    text_batches = df_to_text_batches(df)
 
     for userid in ADMIN_USERIDS:
         # Split text into batches
-        for i in range(0, len(text), MAX_MESSAGE_TEXT_LENGTH):
-            bot.send_message(userid, text[i:i + MAX_MESSAGE_TEXT_LENGTH])
+        for text in text_batches:
+            bot.send_message(userid, text)
