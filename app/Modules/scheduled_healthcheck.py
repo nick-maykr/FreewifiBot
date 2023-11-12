@@ -31,6 +31,8 @@ def get_problematic_hotspots() -> pd.DataFrame:
         df = pd.read_sql(q, c)
 
     df = df[df.days_offline >= DAYS_OFFLINE_FOR_ALERT]
+    # Correct for UTC+3
+    df["last_connection"] += pd.Timedelta(hours=3)
     return df
 
 
@@ -56,7 +58,7 @@ def df_to_text_batches(df: pd.DataFrame) -> list[str]:
     return text_batches
 
 
-@scheduler.task('cron', id='run_healthcheck', hour=16)
+@scheduler.task('cron', id='run_healthcheck', hour=7)
 def run_healthcheck():
     df = get_problematic_hotspots()
     if df.empty:
