@@ -38,16 +38,21 @@ def df_to_text_batches(df: pd.DataFrame) -> list[str]:
     text_batches = []
     current_text_batch = ""
     for row in df.itertuples(index=False):
-        text = f"{row.hotspot}\nLast connection: {row.last_connection} ({row.days_offline}) day(s) ago\n\n"
+        text = f"{row.hotspot}\n" \
+               f"Last connection: {row.last_connection} " \
+               f"({row.days_offline}) day(s) ago\n\n"
+
         if len(text) > MAX_MESSAGE_TEXT_LENGTH:
             text = "<Text length error>"
 
-        if len(current_text_batch + text) < MAX_MESSAGE_TEXT_LENGTH:
-            current_text_batch += text
-        else:
-            text_batches += current_text_batch
+        if len(current_text_batch + text) >= MAX_MESSAGE_TEXT_LENGTH:
+            text_batches.append(current_text_batch)
             current_text_batch = text
+            continue
 
+        current_text_batch += text
+
+    text_batches.append(current_text_batch)
     return text_batches
 
 
