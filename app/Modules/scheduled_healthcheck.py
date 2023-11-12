@@ -39,8 +39,8 @@ def df_to_text_batches(df: pd.DataFrame) -> list[str]:
     current_text_batch = ""
     for row in df.itertuples(index=False):
         text = f"{row.hotspot}\n" \
-               f"Last connection: {row.last_connection} " \
-               f"({row.days_offline}) day(s) ago\n\n"
+               f"Last connection: {row.last_connection}\n" \
+               f"{row.days_offline} days ago\n\n"
 
         if len(text) > MAX_MESSAGE_TEXT_LENGTH:
             text = "<Text length error>"
