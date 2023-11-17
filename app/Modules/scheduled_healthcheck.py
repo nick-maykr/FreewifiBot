@@ -37,8 +37,11 @@ def get_problematic_hotspots() -> pd.DataFrame:
 
 
 def df_to_text_batches(df: pd.DataFrame) -> list[str]:
+    """
+    Telegram messages have character limit
+    """
     text_batches = []
-    current_text_batch = ""
+    current_text_batch = f"{df.shape[0]} hotspots, {df.days_offline.sum()} days\n---\n\n"
     for row in df.itertuples(index=False):
         text = f"{row.hotspot}\n" \
                f"Last connection: {row.last_connection}\n" \
@@ -67,6 +70,5 @@ def run_healthcheck():
     text_batches = df_to_text_batches(df)
 
     for userid in ADMIN_USERIDS:
-        # Split text into batches
         for text in text_batches:
             bot.send_message(userid, text)
