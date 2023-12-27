@@ -1,3 +1,5 @@
+import datetime
+
 from flask_apscheduler import APScheduler
 import pandas as pd
 import pymysql.cursors
@@ -5,7 +7,8 @@ import pymysql.cursors
 from Modules.Bot import bot
 from Modules.BotDatabase import Hotspots
 from config import (
-    ADMIN_USERIDS,
+    CPO_USERID,
+    DIR_USERID,
     DAYS_OFFLINE_FOR_ALERT,
     MAX_MESSAGE_TEXT_LENGTH,
     PROD_DB,
@@ -67,8 +70,12 @@ def run_healthcheck():
     if df.empty:
         return
 
+    userids = [DIR_USERID]
+    if datetime.date.today().day % 5 == 0:
+        userids.append(CPO_USERID)
+
     text_batches = df_to_text_batches(df)
 
-    for userid in ADMIN_USERIDS:
+    for userid in userids:
         for text in text_batches:
             bot.send_message(userid, text)
